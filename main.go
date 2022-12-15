@@ -1,26 +1,28 @@
 package main
 
 import (
-	"fmt"
+	"backend/internal/product"
+
+	"github.com/Rhymond/go-money"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	// r := gin.Default()
-	// r.GET("/ping", func(c *gin.Context) {
-	// 	c.JSON(200, gin.H{
-	// 		"message": "Hello World",
-	// 	})
-	// })
-	// r.Run(":8000") // listen and serve on 0.0.0.0:8080
-	fmt.Println(shippingPrice(9))
-}
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello World",
+		})
+	})
 
-func shippingPrice(numberKg uint) int {
-	if numberKg <= 10 {
-		return 10
-	} else if numberKg <= 20 {
-		return 25
-	} else {
-		return 50
-	}
+	r.GET("/products", func(ctx *gin.Context) {
+		ctx.JSON(200, product.Product{
+			ID:               "868",
+			Name:             "Handbook",
+			Description:      "July, 2022",
+			PriceVATExcluded: money.New(1000,"USD"),
+			VAT:              money.New(1200, "USD"),
+		})
+	})
+	r.Run(":8000") // listen and serve on 0.0.0.0:8080
 }
