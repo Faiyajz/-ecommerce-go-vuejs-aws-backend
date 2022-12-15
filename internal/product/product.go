@@ -11,3 +11,4 @@ type Product struct {
 	PriceVATExcluded *money.Money `json:"priceVatExcluded"`
 	VAT              *money.Money `json:"vat"`
 }
+
