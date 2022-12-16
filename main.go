@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/internal/category"
 	"backend/internal/product"
 
 	"github.com/Rhymond/go-money"
@@ -41,6 +42,23 @@ func main() {
 		}
 		ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
 		ctx.JSON(200, products)
+	})
+
+	r.GET("/categories", func(ctx *gin.Context) {
+		categories := []category.Category{
+			{
+				ID:          "1",
+				Name:        "HardCover",
+				Description: "A Hard Copy of the Handbook",
+			},
+			{
+				ID:          "2",
+				Name:        "Digital Version",
+				Description: "A Soft Copy of the Handbook",
+			},
+		}
+		ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
+		ctx.JSON(200, categories)
 	})
 	r.Run(":9000") // listen and serve on 0.0.0.0:8080
 }
