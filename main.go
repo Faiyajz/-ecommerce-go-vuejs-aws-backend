@@ -1,14 +1,21 @@
 package main
 
 import (
-	"backend/internal/category"
 	"backend/internal/product"
+	"backend/internal/server"
+	"log"
 
 	"github.com/Rhymond/go-money"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	myServer, err := server.New(server.Config{})
+
+	if err != nil {
+		log.Fatalf("impossible to create the server: %s", err)
+	}
+
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -44,21 +51,6 @@ func main() {
 		ctx.JSON(200, products)
 	})
 
-	r.GET("/categories", func(ctx *gin.Context) {
-		categories := []category.Category{
-			{
-				ID:          "1",
-				Name:        "HardCover",
-				Description: "A Hard Copy of the Handbook",
-			},
-			{
-				ID:          "2",
-				Name:        "Digital Version",
-				Description: "A Soft Copy of the Handbook",
-			},
-		}
-		ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
-		ctx.JSON(200, categories)
-	})
+	r.GET("/categories", myServer.Categories)
 	r.Run(":9000") // listen and serve on 0.0.0.0:8080
 }
