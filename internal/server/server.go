@@ -50,34 +50,74 @@ func (server *Server) Categories(ctx *gin.Context) {
 			Description: "kdsjdjsidjisdj",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
+	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8081")
 	ctx.JSON(http.StatusOK, categories)
 }
 
 func (server *Server) Products(ctx *gin.Context) {
+
+	twoEuro := money.New(200, "EUR")
+	fourEuro := money.New(400, "EUR")
+
 	products := []product.Product{
 		{
 			ID:               "42",
-			Name:             "Test",
+			Name:             "Handbook Digital Version",
+			ShortDescription: "July, 2022",
 			Description:      "This is my product",
-			PriceVATExcluded: money.New(100, "EUR"),
-			VAT:              money.New(200, "EUR"),
+			PriceVATExcluded: product.Amount{
+				Money:   twoEuro,
+				Display: twoEuro.Display(),
+			},
+			VAT: product.Amount{
+				Money:   twoEuro,
+				Display: twoEuro.Display(),
+			},
+			TotalPrice: product.Amount{
+				Money:   fourEuro,
+				Display: fourEuro.Display(),
+			},
+			Image: "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_1280.png",
 		},
 		{
 			ID:               "43",
 			Name:             "Test",
+			ShortDescription: "New",
 			Description:      "This is my product",
-			PriceVATExcluded: money.New(100, "EUR"),
-			VAT:              money.New(250, "EUR"),
+			PriceVATExcluded: product.Amount{
+				Money:   twoEuro,
+				Display: twoEuro.Display(),
+			},
+			VAT: product.Amount{
+				Money:   twoEuro,
+				Display: twoEuro.Display(),
+			},
+			TotalPrice: product.Amount{
+				Money:   fourEuro,
+				Display: fourEuro.Display(),
+			},
+			Image: "https://cdn.pixabay.com/photo/2014/09/08/05/06/book-438935_1280.png",
 		},
 		{
 			ID:               "44",
 			Name:             "Test",
 			Description:      "This is my product",
-			PriceVATExcluded: money.New(189, "EUR"),
-			VAT:              money.New(200, "EUR"),
+			ShortDescription: "New",
+			PriceVATExcluded: product.Amount{
+				Money:   twoEuro,
+				Display: twoEuro.Display(),
+			},
+			VAT: product.Amount{
+				Money:   twoEuro,
+				Display: twoEuro.Display(),
+			},
+			TotalPrice: product.Amount{
+				Money:   fourEuro,
+				Display: fourEuro.Display(),
+			},
+			Image: "https://cdn.pixabay.com/photo/2012/04/12/13/54/book-30127_1280.png",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
+	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8081")
 	ctx.JSON(200, products)
 }
