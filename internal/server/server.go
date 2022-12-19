@@ -3,22 +3,41 @@ package server
 import (
 	"backend/internal/category"
 	"backend/internal/product"
+	"fmt"
+	"net/http"
 
 	"github.com/Rhymond/go-money"
 	"github.com/gin-gonic/gin"
 )
 
 type Server struct {
+	engine *gin.Engine
+	port   uint
 }
 
 type Config struct {
+	Port uint
 }
 
 func New(config Config) (*Server, error) {
-	return &Server{}, nil
+	engine := gin.Default()
+
+	server := &Server{
+		engine: engine,
+		port:   config.Port,
+	}
+
+	engine.GET("/products", server.Products)
+	engine.GET("/categories", server.Categories)
+
+	return server, nil
 }
 
-func(server *Server) Products(ctx *gin.Context) {
+func (server *Server) Run() error {
+	return server.engine.Run(fmt.Sprintf("%d", server.port))
+}
+
+func (server *Server) Products(ctx *gin.Context) {
 	products := []product.Product{
 		{
 			ID:               "868",
@@ -60,5 +79,5 @@ func (server *Server) Categories(ctx *gin.Context) {
 		},
 	}
 	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
-	ctx.JSON(200, categories)
+	ctx.JSON(http.StatusOK, categories)
 }
