@@ -1,0 +1,17 @@
+service: myLambdaFunctionTestService
+
+provider: 
+  name: aws
+  runtime: go1.x
+  region: ap-southeast-1
+
+package: 
+  exclude: 
+    - ./**
+  include: 
+    - ./bin/**
+
+functions: 
+  hello:
+    handler: bin/hello
+  
