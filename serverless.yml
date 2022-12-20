@@ -1,4 +1,4 @@
-service: myLambdaFunctionTestService
+service: myLambdaFunctionTestServiceApi
 
 provider: 
   name: aws
@@ -14,4 +14,13 @@ package:
 functions: 
   hello:
     handler: bin/hello
+  api:
+    handler: bin/api
+    events: 
+      - http:
+         path: /products
+         method: get
+      - http: 
+         path: /categories
+         method: get
   

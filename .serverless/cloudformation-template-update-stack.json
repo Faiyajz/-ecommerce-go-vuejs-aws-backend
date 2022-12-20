@@ -74,7 +74,13 @@
     "HelloLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/myLambdaFunctionTestService-dev-hello"
+        "LogGroupName": "/aws/lambda/myLambdaFunctionTestServiceApi-dev-hello"
+      }
+    },
+    "ApiLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/myLambdaFunctionTestServiceApi-dev-api"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +108,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "myLambdaFunctionTestService",
+                  "myLambdaFunctionTestServiceApi",
                   "dev",
                   "lambda"
                 ]
@@ -119,7 +125,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/myLambdaFunctionTestService-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/myLambdaFunctionTestServiceApi-dev*:*"
                     }
                   ]
                 },
@@ -130,7 +136,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/myLambdaFunctionTestService-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/myLambdaFunctionTestServiceApi-dev*:*:*"
                     }
                   ]
                 }
@@ -143,7 +149,7 @@
           "Fn::Join": [
             "-",
             [
-              "myLambdaFunctionTestService",
+              "myLambdaFunctionTestServiceApi",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -161,11 +167,11 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/myLambdaFunctionTestService/dev/1671504714094-2022-12-20T02:51:54.094Z/myLambdaFunctionTestService.zip"
+          "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671523536666-2022-12-20T08:05:36.666Z/myLambdaFunctionTestServiceApi.zip"
         },
         "Handler": "bin/hello",
         "Runtime": "go1.x",
-        "FunctionName": "myLambdaFunctionTestService-dev-hello",
+        "FunctionName": "myLambdaFunctionTestServiceApi-dev-hello",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
@@ -179,14 +185,233 @@
         "HelloLogGroup"
       ]
     },
-    "HelloLambdaVersionluOj8qmT0ufmOlqE7klJoM1kWkGyvSuh2FcQxGPOQo": {
+    "ApiLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671523536666-2022-12-20T08:05:36.666Z/myLambdaFunctionTestServiceApi.zip"
+        },
+        "Handler": "bin/api",
+        "Runtime": "go1.x",
+        "FunctionName": "myLambdaFunctionTestServiceApi-dev-api",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ApiLogGroup"
+      ]
+    },
+    "HelloLambdaVersionrp5XPAEWMXvbV1Ds0EgFU468Abjq7QSyg79mHrNZ0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "Njx19heYkUGQcuqr0QuoDPKtfEHLEj8dGaXwhT5bwpM="
+        "CodeSha256": "UGWyRm1aD0mNm7rSmhs+Hx3p4NLcxvEJtvXDHeW9E54="
+      }
+    },
+    "ApiLambdaVersionaPzPk2q2owot3TAAImpKGcSIAE5w1CUSPlAu4EN8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ApiLambdaFunction"
+        },
+        "CodeSha256": "UGWyRm1aD0mNm7rSmhs+Hx3p4NLcxvEJtvXDHeW9E54="
+      }
+    },
+    "ApiGatewayRestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "dev-myLambdaFunctionTestServiceApi",
+        "EndpointConfiguration": {
+          "Types": [
+            "EDGE"
+          ]
+        },
+        "Policy": ""
+      }
+    },
+    "ApiGatewayResourceProducts": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "products",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceCategories": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "categories",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodProductsGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceProducts"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "ApiLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodCategoriesGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCategories"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "ApiLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayDeployment1671523525564": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "StageName": "dev"
+      },
+      "DependsOn": [
+        "ApiGatewayMethodProductsGet",
+        "ApiGatewayMethodCategoriesGet"
+      ]
+    },
+    "ApiLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
       }
     }
   },
@@ -196,16 +421,51 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-myLambdaFunctionTestService-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-myLambdaFunctionTestServiceApi-dev-ServerlessDeploymentBucketName"
       }
     },
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionluOj8qmT0ufmOlqE7klJoM1kWkGyvSuh2FcQxGPOQo"
+        "Ref": "HelloLambdaVersionrp5XPAEWMXvbV1Ds0EgFU468Abjq7QSyg79mHrNZ0"
       },
       "Export": {
-        "Name": "sls-myLambdaFunctionTestService-dev-HelloLambdaFunctionQualifiedArn"
+        "Name": "sls-myLambdaFunctionTestServiceApi-dev-HelloLambdaFunctionQualifiedArn"
+      }
+    },
+    "ApiLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ApiLambdaVersionaPzPk2q2owot3TAAImpKGcSIAE5w1CUSPlAu4EN8"
+      },
+      "Export": {
+        "Name": "sls-myLambdaFunctionTestServiceApi-dev-ApiLambdaFunctionQualifiedArn"
+      }
+    },
+    "ServiceEndpoint": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiGatewayRestApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-myLambdaFunctionTestServiceApi-dev-ServiceEndpoint"
       }
     }
   }

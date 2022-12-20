@@ -14,7 +14,7 @@ import (
 )
 
 type Server struct {
-	engine *gin.Engine
+	Engine *gin.Engine
 	port   uint
 }
 
@@ -25,7 +25,7 @@ type Config struct {
 func New(config Config) (*Server, error) {
 	engine := gin.Default()
 	server := &Server{
-		engine: engine,
+		Engine: engine,
 		port:   config.Port,
 	}
 	engine.GET("/categories", server.Categories)
@@ -34,7 +34,7 @@ func New(config Config) (*Server, error) {
 }
 
 func (server *Server) Run() error {
-	return server.engine.Run(fmt.Sprintf(":%d", server.port))
+	return server.Engine.Run(fmt.Sprintf(":%d", server.port))
 }
 
 func (server *Server) Categories(ctx *gin.Context) {
