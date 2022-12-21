@@ -50,7 +50,7 @@ func (server *Server) Categories(ctx *gin.Context) {
 			Description: "kdsjdjsidjisdj",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
+	ctx.Header("Access-Control-Allow-Origin", "https://dev.d1vtmulfc50bq6.amplifyapp.com")
 	ctx.JSON(http.StatusOK, categories)
 }
 
@@ -118,6 +118,6 @@ func (server *Server) Products(ctx *gin.Context) {
 			Image: "https://cdn.pixabay.com/photo/2012/04/12/13/54/book-30127_1280.png",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", "http://localhost:8080")
+	ctx.Header("Access-Control-Allow-Origin", "https://dev.d1vtmulfc50bq6.amplifyapp.com")
 	ctx.JSON(200, products)
 }

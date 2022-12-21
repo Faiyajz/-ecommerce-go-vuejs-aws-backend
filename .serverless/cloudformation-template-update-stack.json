@@ -167,7 +167,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671523536666-2022-12-20T08:05:36.666Z/myLambdaFunctionTestServiceApi.zip"
+          "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671595711201-2022-12-21T04:08:31.201Z/myLambdaFunctionTestServiceApi.zip"
         },
         "Handler": "bin/hello",
         "Runtime": "go1.x",
@@ -192,7 +192,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671523536666-2022-12-20T08:05:36.666Z/myLambdaFunctionTestServiceApi.zip"
+          "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671595711201-2022-12-21T04:08:31.201Z/myLambdaFunctionTestServiceApi.zip"
         },
         "Handler": "bin/api",
         "Runtime": "go1.x",
@@ -210,24 +210,24 @@
         "ApiLogGroup"
       ]
     },
-    "HelloLambdaVersionrp5XPAEWMXvbV1Ds0EgFU468Abjq7QSyg79mHrNZ0": {
+    "HelloLambdaVersionqmfyNirW6E8EYeJjgMGZgtXEcAfFH0jv1m18ZBrVIBk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "UGWyRm1aD0mNm7rSmhs+Hx3p4NLcxvEJtvXDHeW9E54="
+        "CodeSha256": "Lx0tGgX+cCwLFmzZp3VhSuvY4zg6xzy4+6jUMIL91RM="
       }
     },
-    "ApiLambdaVersionaPzPk2q2owot3TAAImpKGcSIAE5w1CUSPlAu4EN8": {
+    "ApiLambdaVersion8iZF0ROJF1xbYx5pXDF7uk31YQvLwiUGH19aTM3BgQo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "UGWyRm1aD0mNm7rSmhs+Hx3p4NLcxvEJtvXDHeW9E54="
+        "CodeSha256": "Lx0tGgX+cCwLFmzZp3VhSuvY4zg6xzy4+6jUMIL91RM="
       }
     },
     "ApiGatewayRestApi": {
@@ -364,7 +364,7 @@
         "ApiLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1671523525564": {
+    "ApiGatewayDeployment1671595702901": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -427,7 +427,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionrp5XPAEWMXvbV1Ds0EgFU468Abjq7QSyg79mHrNZ0"
+        "Ref": "HelloLambdaVersionqmfyNirW6E8EYeJjgMGZgtXEcAfFH0jv1m18ZBrVIBk"
       },
       "Export": {
         "Name": "sls-myLambdaFunctionTestServiceApi-dev-HelloLambdaFunctionQualifiedArn"
@@ -436,7 +436,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionaPzPk2q2owot3TAAImpKGcSIAE5w1CUSPlAu4EN8"
+        "Ref": "ApiLambdaVersion8iZF0ROJF1xbYx5pXDF7uk31YQvLwiUGH19aTM3BgQo"
       },
       "Export": {
         "Name": "sls-myLambdaFunctionTestServiceApi-dev-ApiLambdaFunctionQualifiedArn"
