@@ -31,6 +31,7 @@ func New(config Config) (*Server, error) {
 		port:          config.Port,
 		allowedOrigin: config.AllowedOrigin,
 	}
+	engine.Use(server.CORSMiddleware, server.MiddlewareServerModel, server.CheckRequest)
 	engine.GET("/categories", server.Categories)
 	engine.GET("/products", server.Products)
 	return server, nil
@@ -38,6 +39,23 @@ func New(config Config) (*Server, error) {
 
 func (server *Server) Run() error {
 	return server.Engine.Run(fmt.Sprintf(":%d", server.port))
+}
+
+func (server Server) MiddlewareServerModel(ctx *gin.Context) {
+	ctx.Header("X-Server-Model", "Gin")
+}
+
+func (server Server) CORSMiddleware(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", server.allowedOrigin)
+}
+
+func (server Server) CheckRequest(ctx *gin.Context) {
+	authValue := ctx.GetHeader("Authorization")
+
+	if authValue != "ABC" {
+		ctx.AbortWithStatus(http.StatusForbidden)
+		return
+	}
 }
 
 func (server *Server) Categories(ctx *gin.Context) {
@@ -53,7 +71,6 @@ func (server *Server) Categories(ctx *gin.Context) {
 			Description: "kdsjdjsidjisdj",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", server.allowedOrigin)
 	ctx.JSON(http.StatusOK, categories)
 }
 
@@ -121,6 +138,5 @@ func (server *Server) Products(ctx *gin.Context) {
 			Image: "https://cdn.pixabay.com/photo/2012/04/12/13/54/book-30127_1280.png",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", server.allowedOrigin)
 	ctx.JSON(200, products)
 }

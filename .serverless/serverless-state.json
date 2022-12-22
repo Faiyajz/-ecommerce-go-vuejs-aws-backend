@@ -9,7 +9,7 @@
       "runtime": "go1.x",
       "region": "ap-southeast-1",
       "environment": {
-        "ALLOWED_ORIGIN": "https://dev.d1vtmulfc50bq6.amplifyapp.com"
+        "ALLOWED_ORIGIN": "http://localhost:8080"
       },
       "stage": "dev",
       "versionFunctions": true,
@@ -182,7 +182,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671615294304-2022-12-21T09:34:54.304Z/myLambdaFunctionTestServiceApi.zip"
+                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671688760617-2022-12-22T05:59:20.617Z/myLambdaFunctionTestServiceApi.zip"
               },
               "Handler": "bin/hello",
               "Runtime": "go1.x",
@@ -191,7 +191,7 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "ALLOWED_ORIGIN": "https://dev.d1vtmulfc50bq6.amplifyapp.com"
+                  "ALLOWED_ORIGIN": "http://localhost:8080"
                 }
               },
               "Role": {
@@ -212,7 +212,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671615294304-2022-12-21T09:34:54.304Z/myLambdaFunctionTestServiceApi.zip"
+                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1671688760617-2022-12-22T05:59:20.617Z/myLambdaFunctionTestServiceApi.zip"
               },
               "Handler": "bin/api",
               "Runtime": "go1.x",
@@ -221,7 +221,7 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "ALLOWED_ORIGIN": "https://dev.d1vtmulfc50bq6.amplifyapp.com"
+                  "ALLOWED_ORIGIN": "http://localhost:8080"
                 }
               },
               "Role": {
@@ -235,24 +235,24 @@
               "ApiLogGroup"
             ]
           },
-          "HelloLambdaVersionQGE4ZmW6daTIdsOHopRsgmynqIiaVi6JgvXH0PuIA4": {
+          "HelloLambdaVersionJJqzD3sfW67kRdmZkhGiT0NCVJIKykg4d5Qcv4CA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "Vpej+gEU6viGlL8VIdCfDs1skqQU/0X57h3LrNwxPSw="
+              "CodeSha256": "koYqnsBit6ZP0ndD3j2UhyyB92VgY/VaX92EBgd0RfA="
             }
           },
-          "ApiLambdaVersionk0e4mcHsZ2kV6rd4x427Sg2U7Lr8Gu9V8JArJbsumU": {
+          "ApiLambdaVersionLiP0JXi0mk62w3nEDR1StR102jb6fa8lJ1zqF8928": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "Vpej+gEU6viGlL8VIdCfDs1skqQU/0X57h3LrNwxPSw="
+              "CodeSha256": "koYqnsBit6ZP0ndD3j2UhyyB92VgY/VaX92EBgd0RfA="
             }
           },
           "ApiGatewayRestApi": {
@@ -389,7 +389,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1671615290218": {
+          "ApiGatewayDeployment1671688750181": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -452,7 +452,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionQGE4ZmW6daTIdsOHopRsgmynqIiaVi6JgvXH0PuIA4"
+              "Ref": "HelloLambdaVersionJJqzD3sfW67kRdmZkhGiT0NCVJIKykg4d5Qcv4CA"
             },
             "Export": {
               "Name": "sls-myLambdaFunctionTestServiceApi-dev-HelloLambdaFunctionQualifiedArn"
@@ -461,7 +461,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionk0e4mcHsZ2kV6rd4x427Sg2U7Lr8Gu9V8JArJbsumU"
+              "Ref": "ApiLambdaVersionLiP0JXi0mk62w3nEDR1StR102jb6fa8lJ1zqF8928"
             },
             "Export": {
               "Name": "sls-myLambdaFunctionTestServiceApi-dev-ApiLambdaFunctionQualifiedArn"
@@ -590,7 +590,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionQGE4ZmW6daTIdsOHopRsgmynqIiaVi6JgvXH0PuIA4"
+        "versionLogicalId": "HelloLambdaVersionJJqzD3sfW67kRdmZkhGiT0NCVJIKykg4d5Qcv4CA"
       },
       "api": {
         "handler": "bin/api",
@@ -616,7 +616,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionk0e4mcHsZ2kV6rd4x427Sg2U7Lr8Gu9V8JArJbsumU"
+        "versionLogicalId": "ApiLambdaVersionLiP0JXi0mk62w3nEDR1StR102jb6fa8lJ1zqF8928"
       }
     },
     "configValidationMode": "warn",
@@ -635,7 +635,7 @@
         ],
         "artifactsS3KeyDirname": "serverless/myLambdaFunctionTestServiceApi/dev/code-artifacts",
         "artifact": "/home/noobcoder/GO/ecommerce-go-vuejs-aws/backend/.serverless/myLambdaFunctionTestServiceApi.zip",
-        "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1671615294304-2022-12-21T09:34:54.304Z"
+        "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1671688760617-2022-12-22T05:59:20.617Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -646,7 +646,7 @@
     "artifact": "/home/noobcoder/GO/ecommerce-go-vuejs-aws/backend/.serverless/myLambdaFunctionTestServiceApi.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1671615294304-2022-12-21T09:34:54.304Z",
+    "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1671688760617-2022-12-22T05:59:20.617Z",
     "artifact": "myLambdaFunctionTestServiceApi.zip"
   }
 }

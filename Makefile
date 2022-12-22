@@ -9,3 +9,6 @@ build:
 
 deploy: build
 		serverless deploy --aws-profile junk
+
+deploy_dev: build
+			serverless deploy --aws-profile junk --param="allowedOrigin=http://localhost:8080" --stage dev
