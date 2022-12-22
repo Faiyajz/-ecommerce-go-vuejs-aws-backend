@@ -4,6 +4,7 @@ import (
 	"backend/internal/server"
 	"context"
 	"log"
+	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -13,8 +14,14 @@ import (
 var ginLambda *ginadapter.GinLambda
 
 func init() {
+	allowedOrigin, found := os.LookupEnv("ALLOWED_ORIGIN")
+
+	if !found {
+		log.Fatalf("environement variable not found")
+	}
 	myServer, err := server.New(server.Config{
-		Port: 9000,
+		Port:          9000,
+		AllowedOrigin: allowedOrigin,
 	})
 
 	if err != nil {
@@ -33,4 +40,3 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 func main() {
 	lambda.Start(Handler)
 }
-

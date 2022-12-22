@@ -14,19 +14,22 @@ import (
 )
 
 type Server struct {
-	Engine *gin.Engine
-	port   uint
+	Engine        *gin.Engine
+	port          uint
+	allowedOrigin string
 }
 
 type Config struct {
-	Port uint
+	Port          uint
+	AllowedOrigin string
 }
 
 func New(config Config) (*Server, error) {
 	engine := gin.Default()
 	server := &Server{
-		Engine: engine,
-		port:   config.Port,
+		Engine:        engine,
+		port:          config.Port,
+		allowedOrigin: config.AllowedOrigin,
 	}
 	engine.GET("/categories", server.Categories)
 	engine.GET("/products", server.Products)
@@ -50,7 +53,7 @@ func (server *Server) Categories(ctx *gin.Context) {
 			Description: "kdsjdjsidjisdj",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", "https://dev.d1vtmulfc50bq6.amplifyapp.com")
+	ctx.Header("Access-Control-Allow-Origin", server.allowedOrigin)
 	ctx.JSON(http.StatusOK, categories)
 }
 
@@ -118,6 +121,6 @@ func (server *Server) Products(ctx *gin.Context) {
 			Image: "https://cdn.pixabay.com/photo/2012/04/12/13/54/book-30127_1280.png",
 		},
 	}
-	ctx.Header("Access-Control-Allow-Origin", "https://dev.d1vtmulfc50bq6.amplifyapp.com")
+	ctx.Header("Access-Control-Allow-Origin", server.allowedOrigin)
 	ctx.JSON(200, products)
 }
