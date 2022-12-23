@@ -2,11 +2,15 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"backend/internal/product"
 
 	"github.com/Rhymond/go-money"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 
 	"backend/internal/category"
 
@@ -75,6 +79,40 @@ func (server *Server) Categories(ctx *gin.Context) {
 }
 
 func (server *Server) Products(ctx *gin.Context) {
+
+	awsSession, err := session.NewSession()
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		return
+	}
+	dynamodbClient := dynamodb.New(awsSession)
+
+	tableName := "ecommerce-dev"
+	item := make(map[string]*dynamodb.AttributeValue)
+
+	item["PK"] = &dynamodb.AttributeValue{
+		S: aws.String("test"),
+	}
+	item["SK"] = &dynamodb.AttributeValue{
+		S: aws.String("test2"),
+	}
+	item["foo"] = &dynamodb.AttributeValue{
+		S: aws.String("bar"),
+	}
+
+	output, err := dynamodbClient.PutItem(&dynamodb.PutItemInput{
+		Item:      nil,
+		TableName: &tableName,
+	})
+
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error - database query error"})
+		return
+	}
+
+	log.Println(output)
 
 	twoEuro := money.New(200, "EUR")
 	fourEuro := money.New(400, "EUR")
