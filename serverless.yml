@@ -8,9 +8,8 @@ provider:
     ALLOWED_ORIGIN: ${param:allowedOrigin}
 
 package: 
-  exclude: 
-    - ./**
-  include: 
+  patterns: 
+    - '!./**' 
     - ./bin/**
 
 functions: 
