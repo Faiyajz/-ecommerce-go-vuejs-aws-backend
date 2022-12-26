@@ -88,7 +88,7 @@ func (server *Server) Products(ctx *gin.Context) {
 	}
 	dynamodbClient := dynamodb.New(awsSession)
 
-	tableName := "ecommerce-dev"
+	tableName := "ecom-dev"
 	item := make(map[string]*dynamodb.AttributeValue)
 
 	item["PK"] = &dynamodb.AttributeValue{
@@ -102,7 +102,7 @@ func (server *Server) Products(ctx *gin.Context) {
 	}
 
 	output, err := dynamodbClient.PutItem(&dynamodb.PutItemInput{
-		Item:      nil,
+		Item:      item,
 		TableName: &tableName,
 	})
 
