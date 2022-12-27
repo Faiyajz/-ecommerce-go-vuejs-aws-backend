@@ -2,15 +2,12 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"backend/internal/product"
+	"backend/internal/storage"
 
 	"github.com/Rhymond/go-money"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
 
 	"backend/internal/category"
 
@@ -21,11 +18,13 @@ type Server struct {
 	Engine        *gin.Engine
 	port          uint
 	allowedOrigin string
+	storage       *storage.Dynamo
 }
 
 type Config struct {
 	Port          uint
 	AllowedOrigin string
+	Storage       *storage.Dynamo
 }
 
 func New(config Config) (*Server, error) {
@@ -34,10 +33,12 @@ func New(config Config) (*Server, error) {
 		Engine:        engine,
 		port:          config.Port,
 		allowedOrigin: config.AllowedOrigin,
+		storage:       config.Storage,
 	}
 	engine.Use(server.CORSMiddleware, server.MiddlewareServerModel, server.CheckRequest)
 	engine.GET("/categories", server.Categories)
 	engine.GET("/products", server.Products)
+	engine.POST("/admin/products", server.CreateProduct)
 	return server, nil
 }
 
@@ -79,40 +80,6 @@ func (server *Server) Categories(ctx *gin.Context) {
 }
 
 func (server *Server) Products(ctx *gin.Context) {
-
-	awsSession, err := session.NewSession()
-	if err != nil {
-		log.Println(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
-		return
-	}
-	dynamodbClient := dynamodb.New(awsSession)
-
-	tableName := "ecom-dev"
-	item := make(map[string]*dynamodb.AttributeValue)
-
-	item["PK"] = &dynamodb.AttributeValue{
-		S: aws.String("test"),
-	}
-	item["SK"] = &dynamodb.AttributeValue{
-		S: aws.String("test2"),
-	}
-	item["foo"] = &dynamodb.AttributeValue{
-		S: aws.String("bar"),
-	}
-
-	output, err := dynamodbClient.PutItem(&dynamodb.PutItemInput{
-		Item:      item,
-		TableName: &tableName,
-	})
-
-	if err != nil {
-		log.Println(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error - database query error"})
-		return
-	}
-
-	log.Println(output)
 
 	twoEuro := money.New(200, "EUR")
 	fourEuro := money.New(400, "EUR")
@@ -177,4 +144,8 @@ func (server *Server) Products(ctx *gin.Context) {
 		},
 	}
 	ctx.JSON(200, products)
+}
+
+func (server Server) CreateProduct(ctx *gin.Context) {
+	//
 }
