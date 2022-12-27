@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/internal/server"
+	"backend/internal/storage"
 	"context"
 	"log"
 	"os"
@@ -15,13 +16,19 @@ var ginLambda *ginadapter.GinLambda
 
 func init() {
 	allowedOrigin, found := os.LookupEnv("ALLOWED_ORIGIN")
-
 	if !found {
 		log.Fatalf("environement variable not found")
 	}
+
+	dynamoStorage, err := storage.NewDynamo("ecom-dev")
+	if err != nil {
+		log.Fatalf("impossible to create storage interface: #{err}")
+	}
+
 	myServer, err := server.New(server.Config{
 		Port:          9000,
 		AllowedOrigin: allowedOrigin,
+		Storage:       dynamoStorage,
 	})
 
 	if err != nil {
