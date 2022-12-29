@@ -17,7 +17,7 @@ var ginLambda *ginadapter.GinLambda
 func init() {
 	allowedOrigin, found := os.LookupEnv("ALLOWED_ORIGIN")
 	if !found {
-		log.Fatalf("environement variable not found")
+		log.Fatalf("environment variable not found")
 	}
 
 	dynamoStorage, err := storage.NewDynamo("ecom-dev")
@@ -30,7 +30,6 @@ func init() {
 		AllowedOrigin: allowedOrigin,
 		Storage:       dynamoStorage,
 	})
-
 	if err != nil {
 		log.Fatalf("impossible to create the server: %s", err)
 	}

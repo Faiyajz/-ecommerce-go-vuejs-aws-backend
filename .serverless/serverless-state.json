@@ -212,7 +212,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1672020581173-2022-12-26T02:09:41.173Z/myLambdaFunctionTestServiceApi.zip"
+                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1672193578930-2022-12-28T02:12:58.930Z/myLambdaFunctionTestServiceApi.zip"
               },
               "Handler": "bin/hello",
               "Runtime": "go1.x",
@@ -242,7 +242,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1672020581173-2022-12-26T02:09:41.173Z/myLambdaFunctionTestServiceApi.zip"
+                "S3Key": "serverless/myLambdaFunctionTestServiceApi/dev/1672193578930-2022-12-28T02:12:58.930Z/myLambdaFunctionTestServiceApi.zip"
               },
               "Handler": "bin/api",
               "Runtime": "go1.x",
@@ -265,24 +265,24 @@
               "ApiLogGroup"
             ]
           },
-          "HelloLambdaVersionrJjYu8Cs8zebQ50SsEb7uQFGU0itnCfPbNHj5U": {
+          "HelloLambdaVersionDDgKXTpKSi4R8mNUZnB3pQtqxK99vaRd3cS1Hiezni8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "dXSQJzR+kYAXNsVexJh1B9sx4JiXV4pYirepUeREQOo="
+              "CodeSha256": "Jw0AoOMBabY521qFP7H77RTzm9BUNkyzaneT9hmmU4Y="
             }
           },
-          "ApiLambdaVersionHhC2xTXbkOfM2rHJAtbynjvkGnChL3geXmG7La0": {
+          "ApiLambdaVersionfGlorYPoP3j8OOVRMeuTvoP5qbhzFjxYtPudQMyhB4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "dXSQJzR+kYAXNsVexJh1B9sx4JiXV4pYirepUeREQOo="
+              "CodeSha256": "Jw0AoOMBabY521qFP7H77RTzm9BUNkyzaneT9hmmU4Y="
             }
           },
           "ApiGatewayRestApi": {
@@ -322,6 +322,33 @@
                 ]
               },
               "PathPart": "categories",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceAdmin": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "admin",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceAdminProducts": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceAdmin"
+              },
+              "PathPart": "products",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -419,7 +446,53 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1672020577666": {
+          "ApiGatewayMethodAdminProductsPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAdminProducts"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "ApiLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1672193575289": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -429,7 +502,8 @@
             },
             "DependsOn": [
               "ApiGatewayMethodProductsGet",
-              "ApiGatewayMethodCategoriesGet"
+              "ApiGatewayMethodCategoriesGet",
+              "ApiGatewayMethodAdminProductsPost"
             ]
           },
           "ApiLambdaPermissionApiGateway": {
@@ -482,7 +556,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionrJjYu8Cs8zebQ50SsEb7uQFGU0itnCfPbNHj5U"
+              "Ref": "HelloLambdaVersionDDgKXTpKSi4R8mNUZnB3pQtqxK99vaRd3cS1Hiezni8"
             },
             "Export": {
               "Name": "sls-myLambdaFunctionTestServiceApi-dev-HelloLambdaFunctionQualifiedArn"
@@ -491,7 +565,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionHhC2xTXbkOfM2rHJAtbynjvkGnChL3geXmG7La0"
+              "Ref": "ApiLambdaVersionfGlorYPoP3j8OOVRMeuTvoP5qbhzFjxYtPudQMyhB4"
             },
             "Export": {
               "Name": "sls-myLambdaFunctionTestServiceApi-dev-ApiLambdaFunctionQualifiedArn"
@@ -620,7 +694,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionrJjYu8Cs8zebQ50SsEb7uQFGU0itnCfPbNHj5U"
+        "versionLogicalId": "HelloLambdaVersionDDgKXTpKSi4R8mNUZnB3pQtqxK99vaRd3cS1Hiezni8"
       },
       "api": {
         "handler": "bin/api",
@@ -638,6 +712,13 @@
               "method": "get",
               "integration": "AWS_PROXY"
             }
+          },
+          {
+            "http": {
+              "path": "admin/products",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
           }
         ],
         "name": "myLambdaFunctionTestServiceApi-dev-api",
@@ -646,7 +727,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionHhC2xTXbkOfM2rHJAtbynjvkGnChL3geXmG7La0"
+        "versionLogicalId": "ApiLambdaVersionfGlorYPoP3j8OOVRMeuTvoP5qbhzFjxYtPudQMyhB4"
       }
     },
     "configValidationMode": "warn",
@@ -663,7 +744,7 @@
         ],
         "artifactsS3KeyDirname": "serverless/myLambdaFunctionTestServiceApi/dev/code-artifacts",
         "artifact": "/home/noobcoder/GO/ecommerce-go-vuejs-aws/backend/.serverless/myLambdaFunctionTestServiceApi.zip",
-        "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1672020581173-2022-12-26T02:09:41.173Z"
+        "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1672193578930-2022-12-28T02:12:58.930Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -674,7 +755,7 @@
     "artifact": "/home/noobcoder/GO/ecommerce-go-vuejs-aws/backend/.serverless/myLambdaFunctionTestServiceApi.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1672020581173-2022-12-26T02:09:41.173Z",
+    "artifactDirectoryName": "serverless/myLambdaFunctionTestServiceApi/dev/1672193578930-2022-12-28T02:12:58.930Z",
     "artifact": "myLambdaFunctionTestServiceApi.zip"
   }
 }
