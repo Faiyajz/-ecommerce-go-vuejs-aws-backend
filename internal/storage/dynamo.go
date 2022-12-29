@@ -17,6 +17,7 @@ type Dynamo struct {
 }
 
 func NewDynamo(tableName string) (*Dynamo, error) {
+
 	awsSession, err := session.NewSession()
 	if err != nil {
 		return nil, fmt.Errorf("impossible to create aws session: %w", err)
@@ -44,7 +45,7 @@ func (dynamo *Dynamo) CreateProduct(product product.Product) error {
 		S: aws.String("product"),
 	}
 	item["SK"] = &dynamodb.AttributeValue{
-		S: aws.String("product.ID"),
+		S: aws.String(product.ID),
 	}
 
 	_, err = dynamo.client.PutItem(&dynamodb.PutItemInput{

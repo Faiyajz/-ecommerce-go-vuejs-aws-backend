@@ -2,12 +2,14 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"backend/internal/product"
 	"backend/internal/storage"
 
 	"github.com/Rhymond/go-money"
+	uuid "github.com/satori/go.uuid"
 
 	"backend/internal/category"
 
@@ -147,5 +149,21 @@ func (server *Server) Products(ctx *gin.Context) {
 }
 
 func (server Server) CreateProduct(ctx *gin.Context) {
-	//
+	var productToAdd product.Product
+	err := ctx.BindJSON(&productToAdd)
+
+	if err != nil {
+		log.Printf("error while binding JSON: %s \n", err)
+		return
+	}
+
+	productToAdd.ID = uuid.NewV4().String()
+
+	err = server.storage.CreateProduct(productToAdd)
+	if err != nil {
+		log.Printf("error occured while saving the product: %s \n", err)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "impossible to persist produtct"})
+		return
+	}
+	ctx.JSON(http.StatusOK, productToAdd)
 }
