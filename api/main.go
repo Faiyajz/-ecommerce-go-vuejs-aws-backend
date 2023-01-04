@@ -20,15 +20,18 @@ func init() {
 		log.Fatalf("environment variable not found")
 	}
 
-	dynamoStorage, err := storage.NewDynamo("ecom-dev")
-	if err != nil {
-		log.Fatalf("impossible to create storage interface: #{err}")
-	}
+	// dynamoStorage, err := storage.NewDynamo("ecom-dev")
+	// if err != nil {
+	// 	log.Fatalf("impossible to create storage interface: #{err}")
+	// }
+
+	//method set = all methods with receiver storage.MySQL + all methods with receiver *storage.MySQL
+	mySQLStorage := &storage.MySQL{}
 
 	myServer, err := server.New(server.Config{
 		Port:          9000,
 		AllowedOrigin: allowedOrigin,
-		Storage:       dynamoStorage,
+		Storage:       mySQLStorage,
 	})
 	if err != nil {
 		log.Fatalf("impossible to create the server: %s", err)
